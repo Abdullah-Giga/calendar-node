@@ -1,0 +1,160 @@
+<html lang="en">
+  <body>
+    <%- include('partials/header'); -%>
+
+    <div class="form-container">
+      <form class="create">
+        <h1 class="all orange">Edit Event</h1>
+        <label for="name">Event Name</label>
+        <input type="text" name="name" value="<%=event.name%>" required />
+        <label for="location">Event Location</label>
+        <input
+          type="text"
+          name="location"
+          value="<%=event.location%>"
+          required
+        />
+        <label for="">Event Type:</label>
+        <div class="radio">
+          <input
+            class="radio-btn"
+            type="radio"
+            id="allDay"
+            name="event_type"
+            onclick="hide(1)"
+            value="true"
+          />All Day
+          <input
+            class="radio-btn"
+            type="radio"
+            id="timely"
+            name="event_type"
+            onclick="hide(0)"
+            value="false"
+          />Timely
+        </div>
+
+        <div class="time-fields">
+          <label for="start">Start Time</label>
+          <select name="start" id="start">
+            <option value="<%=event.start%>" selected disabled hidden>
+              <%=event.start%>
+            </option>
+            <option value="9">9 am</option>
+            <option value="9.5">9:30 am</option>
+            <option value="10">10 am</option>
+            <option value="10.5">10:30 am</option>
+            <option value="11">11 am</option>
+            <option value="11.5">11:30 am</option>
+            <option value="12">12 pm</option>
+            <option value="12.5">12:30 pm</option>
+            <option value="13">1 pm</option>
+            <option value="13.5">1:30 pm</option>
+            <option value="14">2 pm</option>
+            <option value="14.5">2:30 pm</option>
+            <option value="15">3 pm</option>
+            <option value="15.5">3:30 pm</option>
+            <option value="16">4 pm</option>
+            <option value="16.5">4:30 pm</option>
+            <option value="17">5 pm</option>
+            <option value="17.5">5:30 pm</option>
+            <option value="18">6 pm</option>
+            <option value="18.5">6:30 pm</option>
+            <option value="19">7 pm</option>
+            <option value="19.5">7:30 pm</option>
+            <option value="20">8 pm</option>
+            <option value="20.5">8:30 pm</option>
+          </select>
+          <label for="end">End Time</label>
+          <select name="end" id="end">
+            <option value="<%=event.end%>" selected disabled hidden>
+              <%=event.end%>
+            </option>
+            <option value="9" disabled>9 am</option>
+            <option value="9.5">9:30 am</option>
+            <option value="10">10 am</option>
+            <option value="10.5">10:30 am</option>
+            <option value="11">11 am</option>
+            <option value="11.5">11:30 am</option>
+            <option value="12">12 pm</option>
+            <option value="12.5">12:30 pm</option>
+            <option value="13">1 pm</option>
+            <option value="13.5">1:30 pm</option>
+            <option value="14">2 pm</option>
+            <option value="14.5">2:30 pm</option>
+            <option value="15">3 pm</option>
+            <option value="15.5">3:30 pm</option>
+            <option value="16">4 pm</option>
+            <option value="16.5">4:30 pm</option>
+            <option value="17">5 pm</option>
+            <option value="17.5">5:30 pm</option>
+            <option value="18">6 pm</option>
+            <option value="18.5">6:30 pm</option>
+            <option value="19">7 pm</option>
+            <option value="19.5">7:30 pm</option>
+            <option value="20">8 pm</option>
+            <option value="20.5">8:30 pm</option>
+            <option value="21">9 pm</option>
+          </select>
+        </div>
+
+        <div class="buttons">
+          <button class="btn-orange" type="submit">Update</button>
+          <button href="" class="delete" data-doc="<%= event._id%>">
+            Delete
+          </button>
+          <!-- <button href="/events" class="cancel">Cancel</button> -->
+        </div>
+      </form>
+    </div>
+    <script>
+      let allDay = document.querySelector("#allDay");
+
+      function hide(x) {
+        if (x == 0) {
+          document.querySelector(".time-fields").style.display = "block";
+          allDay = false;
+        } else {
+          document.querySelector(".time-fields").style.display = "none";
+          allDay = true;
+        }
+      }
+
+      const form = document.querySelector("form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const start = form.start.value;
+        const end = form.end.value;
+        const name = form.name.value;
+        const location = form.location.value;
+        // let allday = allDay.form.value
+        
+
+        const result = await fetch("/events/edit/<%=event._id%>", {
+          method: "PUT",
+          body: JSON.stringify({ start, end, name, location, allDay }),
+          headers: { "Content-Type": "application/json" },
+        });
+        window.location.href = "/events";
+        // console.log(result);
+      });
+
+      const trashcan = document.querySelector(".delete");
+      trashcan.addEventListener("click", (e) => {
+        const endPoint = `/events/edit/${trashcan.dataset.doc}`;
+        fetch(endPoint, {
+          method: "DELETE",
+        })
+          .then((response) => {
+            response
+              .json()
+              .then((data) => (window.location.href = data.redirect));
+          })
+          .catch((err) => console.log(err));
+      });
+      
+    </script>
+    <%- include('partials/footer'); -%>
+  </body>
+</html>

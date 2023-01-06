@@ -1,0 +1,20 @@
+
+<body>
+    <%- include('partials/header'); -%>
+    <div class="container">
+    <div class="user-container">
+    <div class="user-details">
+        <h1 class="h-pink"><%=user.firstName%> <%=user.lastName%></h1>
+        <h3><%=user.email%></h3>
+    </div>
+    <div class="profile-pic">
+        <img src="/pp.jpg" alt="">
+    </div>
+</div>
+<div class="about">
+    <h2 class="h-pink">About me.</h2>
+</div>
+</div>
+    <%- include('partials/footer'); -%>
+</body>
+</html>
